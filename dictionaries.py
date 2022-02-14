@@ -21,7 +21,7 @@ docs_std_resolution = {
                        }
 
 dict_document = {
-                'NFS': ['CNPJ', 'con', 'vencimento', 'nome', 'PO', 'valor', 'descricao','pesoBruto'], #'desconto'],
+                'NFS': ['CNPJ', 'con', 'vencimento', 'nome', 'PO', 'valor', 'descricao','pesoBruto',],  #'desconto'],
                 'recibo_locacao': ['con', 'nome', 'PO', 'valor'],# 'contaContabil', 'centroCusto','desconto'],
                 'nota_debito': ['con', 'vencimento', 'nome', 'PO', 'valor','descricao','pesoBruto'], #'descricao','desconto'],
                 'mapa_faturamento': ['PO', 'con', 'valor', 'nome', 'CNPJ'],#'desconto'],
@@ -29,7 +29,7 @@ dict_document = {
                 'custo_frete':['nome', 'con','CNPJ','valor'], 
                 'DACTE':['con','CNPJ','nome','valor','vencimento'],
                 'fatura_frete':['CNPJ','vencimento','valor'],
-                'detalhamento_notafiscal':['valorImposto','valorSem','CIF','taxa','descricao','nome','moeda'], #'tipoServico','periodo'
+                'detalhamento_notafiscal':['valor','valorSem','CIF','taxa','descricao','nome','moeda'], #'tipoServico','periodo'
                 'minuta_calculo':['nome','valorCIF','valor','CNTR','descricao','periodo'],#periodo = data de envio até data chegada
                 'boleto':['valor','data','con']
                  }
@@ -355,3 +355,6 @@ field_validation = {
                     }
 
 manyPagesDocList = ['custo_frete', 'fatura_frete', 'fatura_duplicata', None]
+
+# NFS DENISE servicoPrestado:(170,1038,1085) , GKO servicoPrestado:(28,1240,1306), RIO servicoPrestado:(85,2450,2624)
+# NFS AGV servicoPrestado(243,2200,2304), SHIFT servicoPrestado:(170,1035,1085)
