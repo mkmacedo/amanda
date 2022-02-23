@@ -1,3 +1,5 @@
+from DescricaoNFS import getCleanDescriptionType1
+
 docs_std_resolution = {
                         'AGV': {'NFS': (2480, 3509), 'recibo_locacao': (2550, 3300), 'mapa_faturamento': (2550, 3300),'custo_frete':(1753,1240),'fatura_duplicata': (989,1280)},
                         'GKO': {'NFS': (3175, 4150)},
@@ -14,7 +16,7 @@ docs_std_resolution = {
                         'FL':{'DACTE':(1240,1753), 'custo_frete':(1753,1240),'fatura_frete':(1241,1755)},
                         None:{'fatura_frete': (1241,1755)},
                         'MULTIRIO':{'NFS':(1240,1755),'boleto':(1240,1755)},
-                        'ICTSI':{'NFS':(1240,1755),'boleto':(1240,1755)},
+                        'ICTSI':{'NFS':(1240,1755),'boleto':(1240,1755), 'detalhamento_notafiscal': (1653,2339)},
                         'DHL':{'nota_debito':(1240,1755),'NFS':(1240,1755)},
                         'MULTITERMINAIS':{'minuta_calculo':(1275,1650),'boleto':(1240,1755)},
                         'SENIOR': {'NFS': (2480, 3525)}
@@ -25,12 +27,12 @@ dict_document = {
                 'recibo_locacao': ['con', 'nome', 'PO', 'valor'],# 'contaContabil', 'centroCusto','desconto'],
                 'nota_debito': ['con', 'vencimento', 'nome', 'PO', 'valor','descricao','pesoBruto'], #'descricao','desconto'],
                 'mapa_faturamento': ['PO', 'con', 'valor', 'nome', 'CNPJ'],#'desconto'],
-                'fatura_duplicata': ['con', 'CNPJ', 'vencimento', 'nome', 'PO', 'valor', 'descricao'],#'desconto','valorAPagar']
+                'fatura_duplicata': ['con', 'CNPJ', 'vencimento', 'nome', 'PO', 'valor', 'descricao', 'desconto'],#'desconto','valorAPagar']
                 'custo_frete':['nome', 'con','CNPJ','valor'], 
                 'DACTE':['con','CNPJ','nome','valor','vencimento'],
                 'fatura_frete':['CNPJ','vencimento','valor'],
-                'detalhamento_notafiscal':['valor','valorSem','CIF','taxa','descricao','nome','moeda'], #'tipoServico','periodo'
-                'minuta_calculo':['nome','valorCIF','valor','CNTR','descricao','periodo'],#periodo = data de envio até data chegada
+                'detalhamento_notafiscal':['valor','valorSemImposto','CIF','taxa','descricao','nome','moeda', 'dataEntrada', 'dataSaida'], #'tipoServico','periodo'
+                'minuta_calculo':['nome','valorCIF','valor','CNTR','descricao','periodo','dataEntrada', 'dataSaida'],#periodo = data de envio até data chegada
                 'boleto':['valor','data','con']
                  }
 
@@ -92,7 +94,7 @@ dict_map['AGV']['recibo_locacao'] = {'CNPJ': (230, 450, 430, 460),'con': (1949, 
 dict_map['AGV']['custo_frete'] = {'con':(333, 383, 255, 278) ,'CNPJ':(292, 475, 406, 431) ,'nome':(483, 785, 404, 431),'valor':(1465, 1595, 670, 695)}
 
 dict_map['AGV']['fatura_duplicata'] = {'con': (150, 230, 760, 780) ,'vencimento': (683, 787, 758, 780), 'nome': (560, 720, 500, 518), 
-                                    'valor': (760, 920, 410, 430), 'CNPJ': (550, 716, 570, 595)}
+                                    'valor': (760, 920, 410, 430), 'CNPJ': (550, 716, 570, 595), 'desconto': (440, 550, 757, 781)}
 
 #dict_map['AGV']['nota_debito'] = {}
 
@@ -156,7 +158,7 @@ dict_map['RODOLOG']['NFS'] = {'CNPJ': (1429, 1687, 540, 571), 'con': (2107, 2261
 #dict_map['RODOLOG']['mapa_faturamento'] = {}
 #dict_map['RODOLOG']['recibo_locacao'] = {}
 dict_map['RODOLOG']['fatura_duplicata'] = {'con': (225, 365, 2005, 2050) ,'vencimento': (2015, 2230, 682, 730), 'nome': (337, 1231, 375, 420), 
-                                           'PO': (10, 20, 10, 20) , 'valor': (2185, 2357, 1540, 1580), 'descricao': (120, 945, 1770, 1820)}
+                                           'PO': (10, 20, 10, 20) , 'valor': (2185, 2357, 1540, 1580), 'descricao': (120, 945, 1770, 1820), 'desconto': (2050, 2370, 1430, 1490)}
 #dict_map['RODOLOG']['nota_debito'] = {}
 
 #DIREMADI
@@ -165,7 +167,7 @@ dict_map['DIREMADI']['NFS'] = {'CNPJ': (720, 1025, 579, 620), 'con': (1915, 2165
                           'nome': (853, 1549, 635, 681), 'PO': (374, 599, 1237, 1273), 'valor': (1311, 1570, 2140, 2188), 'descricao': (245, 2000, 1196, 1500)}
 
 dict_map['DIREMADI']['fatura_duplicata'] = {'con': (370, 510, 400, 450) ,'vencimento': (1000, 1170, 400, 450), 'nome': (70, 700, 250, 290), 
-                                           'PO': (523, 790, 495, 540) , 'valor': (600, 750, 400, 450), 'descricao': (300, 1577, 610, 760)}
+                                           'PO': (523, 790, 495, 540) , 'valor': (600, 750, 400, 450), 'descricao': (300, 1577, 610, 760), 'desconto': (440, 590, 460, 495)}
 
 #dict_map['DIREMADI']['mapa_faturamento'] = {}
 #dict_map['DIREMADI']['recibo_locacao'] = {}
@@ -199,7 +201,7 @@ dict_map['ANDREANI'] = {}
 #dict_map['ANDREANI']['fatura_duplicata'] = {'con': (175, 260, 170, 190) ,'vencimento': (57, 139, 175, 195), 'nome': (56, 282, 103, 125), 
 #                                        'valor': (485, 645, 175, 199), 'CNPJ': (373, 488, 365, 381)}
 dict_map['ANDREANI']['fatura_duplicata'] = {'con': (230, 400, 226, 270) ,'vencimento': (70, 210, 226, 270), 'nome': (380, 720, 405, 438), 
-                                        'valor': (650, 900, 226, 270), 'CNPJ': (400, 650, 473, 520)}
+                                        'valor': (650, 900, 226, 270), 'CNPJ': (400, 650, 473, 520), 'desconto': (10,20,10,20)}
 dict_map['ANDREANI']['custo_frete'] = {'con':(333, 383, 255, 278) ,'CNPJ':(292, 475, 406, 431) ,'nome':(483, 785, 404, 431),'valor':(1465, 1595, 670, 695)}
 
 #dict_map['ANDREANI']['mapa_faturamento'] = {}
@@ -209,7 +211,7 @@ dict_map['ANDREANI']['custo_frete'] = {'con':(333, 383, 255, 278) ,'CNPJ':(292, 
 #FLBRASIL
 dict_map['FL'] = {}
 dict_map['FL']['fatura_duplicata'] = {'con': (553, 640, 148, 167) ,'vencimento': (653, 757, 148, 168), 'nome': (192, 395, 80, 189), 
-                                        'valor': (1038, 1212, 846,872), 'CNPJ': (67, 190, 235, 255)}
+                                        'valor': (1038, 1212, 846,872), 'CNPJ': (67, 190, 235, 255), 'desconto': (10,20,10,20)}
 
 dict_map['FL']['custo_frete'] = {'con':(330,402, 254,276) ,'CNPJ':(333,476, 405,430) ,'nome':(483,725, 407,430),'valor':(1470,1624, 592,615)}
 dict_map['FL']['DACTE'] = {'con': (553, 640, 148, 167) ,'vencimento': (653, 757, 148, 168), 'nome': (192, 395, 80, 189), 
@@ -242,8 +244,8 @@ dict_map['ICTSI']['NFS'] = {'CNPJ': (359,510,293,313), 'con': (957,1082,135,158)
 #dict_map['ICTSI']['mapa_faturamento'] = {}
 #dict_map['ICTSI']['recibo_locacao'] = {}
 #dict_map['ICTSI']['nota_debito'] = {}
-dict_map['ICTSI']['detalhamento_notafiscal'] = {'CIF':(480,628,636,655),'taxa':(990,650,635,655),'descricao':(62,1195,100,1395),'tipoServico':(60,1170,1525,1725),
-                                                'nome':(150,265,45,99),'moeda':(995,1105,670,689),'periodo':(62,145,898,919),'valorImposto':(975,1090,900,916),'valorSem':(490,635,900,916)}
+dict_map['ICTSI']['detalhamento_notafiscal'] = {'CIF':(650,830,835,890),'taxa':(1300,1500,835,890),'descricao':(62,1195,100,1395),'tipoServico':(60,1170,1525,1725),
+                                                'nome':(40,400,45,150),'moeda':(995,1105,670,689),'periodo':(62,145,898,919),'valor':(10,20,10,20),'valorSemImposto':(10,20,10,20), 'dataEntrada': (1120, 1260, 440, 495), 'dataSaida': (1320,1440, 120, 175)}
 
 #DHL
 dict_map['DHL'] = {}
@@ -265,7 +267,12 @@ dict_map['MULTITERMINAIS'] = {}
 #dict_map['MULTITERMINAIS']['mapa_faturamento'] = {}
 #dict_map['MULTITERMINAIS']['recibo_locacao'] = {}
 #dict_map['MULTITERMINAIS']['nota_debito'] = {}
-dict_map['MULTITERMINAIS']['minuta_calculo'] = {'nome':(160,310,125,160),'valorCIF':(925,1095,402,425),'valor':(965,1091,969,1000),'CNTR':(405,427,360,535),'descricao':(160,530,735,850),'periodo':(670,870,600,640)}
+dict_map['MULTITERMINAIS']['minuta_calculo'] = {'nome':(190,450,160,230),'valorCIF':(925,1095,402,425),'valor':(965,1091,969,1000),'CNTR':(365,427,510,550),'descricao':(160,530,735,850),'periodo':(670,870,600,640), 'dataEntrada':(895,975, 780, 810), 'dataSaida':(985,1070,780,810)}
+
+#SENIOR
+dict_map['SENIOR'] = {}
+dict_map['SENIOR']['NFS'] = {'CNPJ': (730, 1030, 452, 510), 'con': (2000, 2360, 220, 280), 'vencimento': (10, 20, 10, 20),
+                          'nome': (620, 1180, 210, 270), 'PO': (105, 2360, 1040, 2230), 'valor': (1420, 2360, 2740, 2800), 'descricao': (105, 2360, 1040, 2230)}
 
 companies = ['AGV LOGISTICA SA', 
             'RODOLOG TRANSPORTES MULTIMODAIS LTDA', 
@@ -351,10 +358,19 @@ field_validation = {
                     'vencimento': r'[0-9][0-9]/[0-9][0-9]/(?:[0-9][0-9][0-9][0-9]|[0-9][0-9])',
                     'con': r'(?:[a-z]*[A-Z]*[0-9]+|/|-)+',
                     'CNPJ': r'[0-9][0-9]\.[0-9][0-9][0-9]\.[0-9][0-9][0-9]/[0-9][0-9][0-9][0-9]-[0-9][0-9]',
-                    'PO': r'[0-9][0-9]+'
+                    'PO': r'[0-9][0-9]+',
+                    'CNTR': r'[0-9][0-9]',
+                    'dataEntrada': r'[0-9][0-9](?:-|/)[0-9][0-9](?:-|/)[0-9][0-9][0-9][0-9]',
+                    'dataSaida': r'[0-9][0-9](?:-|/)[0-9][0-9](?:-|/)[0-9][0-9][0-9][0-9]'
                     }
 
 manyPagesDocList = ['custo_frete', 'fatura_frete', 'fatura_duplicata', None]
+
+descriptionByNFSType = {
+            'DENISE': lambda x: getCleanDescriptionType1(x),
+            'DIREMADI': lambda x: getCleanDescriptionType1(x),
+            'AGV': lambda x: getCleanDescriptionType1(x),
+            }
 
 # NFS DENISE servicoPrestado:(170,1038,1085) , GKO servicoPrestado:(28,1240,1306), RIO servicoPrestado:(85,2450,2624)
 # NFS AGV servicoPrestado(243,2200,2304), SHIFT servicoPrestado:(170,1035,1085)
