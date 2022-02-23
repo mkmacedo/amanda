@@ -89,7 +89,7 @@ def calculoMulti(cif, **kwargs):
 
     return dadosMulti
 
-#print(calculoMulti(1689043.88, container='40', dias= 4))
+#print('CALCULO MULTI',calculoMulti(1689043.88, container='40', dias= 4))
 #----------------------------------------------------------------------------------------
 
 def calculoLibra(cif, **kwargs): 
