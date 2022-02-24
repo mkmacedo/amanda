@@ -88,3 +88,15 @@ dicionarioRioGaleao = {
                         {'percent': 0.0030, 'min': 79999.99},
                         {'percent': 0.0015, 'min': 80000.00}],
 }
+
+dicionarioDMS = {
+    
+    'handlingAereo' :   [{'percent': 0.0005, 'min': 40.00}],
+
+    'delivreyFeAereo' :  [{'percent': 0.0005, 'min': 28.00}],
+        
+    'taxaAdminMarit' : [{'taxaAdmin': 98.00}],
+
+    'CapataMarit' : [{'capatazia' : 178.00}]
+    
+}
