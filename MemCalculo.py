@@ -178,7 +178,66 @@ class MemCalculoLibra(MemCalculo):
 
 
 class MemCalculoMulti(MemCalculo):
-    def __init__(self, valoresPorPeriodo20, valoresPorPeriodo40, servicosAdi20, servicosAdi40, quantServAdic):
+    def __init__(self):
+        valoresPorPeriodo20 = [{'percent': 0.0041, 'min': 1611.22},
+                                {'percent': 0.0076, 'min': 1384.42},
+                                {'percent': 0.0140, 'min': 1522.87},
+                                {'percent': 0.0180, 'min': 1675.16}]
+        valoresPorPeriodo40 = [{'percent': 0.0041, 'min': 1741.44},
+                                {'percent': 0.0076, 'min': 1527.68},
+                                {'percent': 0.0140, 'min': 1680.45},
+                                {'percent': 0.0180, 'min': 1848.48}]
+
+        servicosAdi20 = [{'carregamento': 383.67},
+                            {'pesagem': 94.00 },
+                            {'posicionamento': 300.92},
+                            {'desunitizacao': 300.92},
+                            {'lacre': 45.13 },
+                            {'reefer': 290.58},
+                            {'aliquota': 0.166181955726821}]
+
+        servicosAdi40 = [{'carregamento': 383.67},
+                            {'pesagem': 94.00 },
+                            {'posicionamento': 476.47},
+                            {'desunitizacao': 476.47},
+                            {'lacre': 45.13 },
+                            {'reefer': 290.58},
+                            {'aliquota': 0.166181955726821}]
+
+        quantServAdic = [{'quantContainer': 1},
+                            {'quantCarregamento': 1},
+                            {'quantPesagem': 1},
+                            {'quantReefer': 1},
+                            {'quantLacre': 0 },
+                            {'quantPosi': 0}]
+
+        self.variaveisPeriodoC20 = {}
+        self.variaveisPeriodoC40 = {}
+        self.servicosAdic20 = {}
+        self.servicosAdic40 = {}
+        self.quantServicAdic = {}
+
+        for i in range(len(valoresPorPeriodo20)):
+            self.variaveisPeriodoC20[i + 1] = valoresPorPeriodo20[i]
+    
+        for i in range(len(valoresPorPeriodo40)):
+            self.variaveisPeriodoC40[i + 1] = valoresPorPeriodo20[i] 
+
+        for i in range(len(servicosAdi20)):
+            self.servicosAdic20[i + 1] = servicosAdi20[i]
+            
+        for i in range(len(servicosAdi40)):
+            self.servicosAdic40[i + 1] = servicosAdi40[i]
+
+        for i in range(len(quantServAdic)):
+            self.quantServicAdic[i + 1] = quantServAdic[i]
+
+    @property
+    def variables(self):                   
+        return (self.variaveisPeriodoC20, self.variaveisPeriodoC40, self.servicosAdi20, self.servicosAdi40, self.quantServAdic)   
+
+    @variables.setter
+    def variables(self,valoresPorPeriodo20, valoresPorPeriodo40, servicosAdi20, servicosAdi40, quantServAdic):
         self.valoresPorPeriodos20 = valoresPorPeriodo20
         self.valoresPorPeriodos40 = valoresPorPeriodo40
         self.servicosAdi20 = servicosAdi20
@@ -325,23 +384,30 @@ from dicionarioCalculos import dicionarioLibra, dicionarioMulti, dicionarioRioGa
 #print(calc.calcular(1712602.58, container = '40', taxaConver = 5.2585, dias= 2))
 #
 #calc2 = MemCalculoMulti(dicionarioMulti['valoresPorPeriodo40'], dicionarioMulti['valoresPorPeriodo40'], dicionarioMulti['servicosAdi20'], dicionarioMulti['servicosAdi40'], dicionarioMulti['quantServAdic'])
-#print(calc2.calcular(1689043.88, container='40', dias= 4))
+calc2 = MemCalculoMulti()
+print(calc2.calcular(1689043.88, container='40', dias= 4))
 #
 
 #x = MemCalculo()
 #print(x.getDias('2021-09-13 00:00:00', '2021-09-16 00:00:00'))
 dataEntrada, dataSaida, pesoBruto, pesoLiq, cif, valor = getRow('PLANILHA - 2 QZ SETEMBRO 2021#.xlsx',1191148.14)
-calc3 = MemCalculoRio(dicionarioRioGaleao['valoresPorPeriodo'], dicionarioRioGaleao['pesoLiquido'])
+#calc3 = MemCalculoRio(dicionarioRioGaleao['valoresPorPeriodo'], dicionarioRioGaleao['pesoLiquido'])
 
 #print(calc3.calcular(1191148.14, dias = 3, pesoBruto = 579, pesoLiquido = 172.90))
-print(calc3.calcular(cif, dataEntrada=dataEntrada, dataSaida=dataSaida, pesoBruto=pesoBruto, pesoLiquido=pesoLiq))
+#print(calc3.calcular(cif, dataEntrada=dataEntrada, dataSaida=dataSaida, pesoBruto=pesoBruto, pesoLiquido=pesoLiq))
 
 
 ##### A Fazer
-#Mudar o construtor para pegar dados padrão ou inseridos pelo usuário
+#Mudar o construtor para pegar dados padrão ou inseridos pelo usuário #OK
 #Outros fornecedores: DHL, KN, API Bacen
 #Coordenadas documentos novos
 #Modulos paddle(fuzzy/rgx) para notas comex
 #Confirmar campos a serem extraídos
+
+#KN
+#   Nota de Debito
+#       N° do documento/ CNPJ/ DATA DE VENCIMENTO/ VALOR  /  qtdContainer / Origem(PI. of Receipt)
+
+#
 
 
