@@ -95,3 +95,4 @@ dicionarioDHL = {
     'delivreyFeeAereo' :  {'percent': 0.05, 'min': 28.00},
         
 }
+

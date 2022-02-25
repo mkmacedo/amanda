@@ -1,3 +1,4 @@
+from sqlalchemy import except_all
 from excelExtraciton import getRow
 from datetime import datetime
 import traceback
@@ -372,8 +373,6 @@ class MemCalculoMulti(MemCalculo):
         return dadosMulti
 
 
-
-
 class MemCalculoRio(MemCalculo):
     def __init__(self, valoresPorPeriodo=None, pesoLiquido=None):
         valoresPorPeriodo = [{'percent': 0.0075},
@@ -482,13 +481,16 @@ class MemCalculoDHL(MemCalculo):
     def calcular(self,**kwargs):
         transportation = kwargs.get("transportation")
         pesoBruto = kwargs.get("pesoBruto")
+        qtdContainer = kwargs.get("qtdContainer")
 
         if transportation == "Marítimo":
             taxaEUR = kwargs.get("taxaEUR")
             formulaPisMarit = self.iss * self.taxaAdminMarit
             formulaEUR = self.taxaAdminMarit + formulaPisMarit
-            formulaEURBRL = formulaEUR * taxaEUR
-            valorBRL = lambda: taxaEUR * self.capataMarit
+            valorBRLImposto = formulaEUR * taxaEUR
+            valorBRL = taxaEUR * self.capataMarit * qtdContainer
+
+            return valorBRLImposto, valorBRL
         
         elif transportation == "Aéreo":
             taxaUSD = kwargs.get("taxaUSD")
@@ -498,9 +500,45 @@ class MemCalculoDHL(MemCalculo):
             formulaUSD  = formulaHandlingAereo()+formulaDeliveryFeeAereo()+formaulaPis()
             valorBRL = lambda: formulaUSD*taxaUSD-(formulaUSD * taxaUSD * 0.015) if(formulaUSD * taxaUSD * 0.015 > 10) else formulaUSD * taxaUSD     
             
-        return valorBRL()
+            return valorBRL()
+            #multiplica container?
 
+class MemCalculoDMS(MemCalculo):
+    def __init__(self, valorProcesso=None, valorLI=None, valorExpurgo=None, iss= None):
+        self.valorProcesso = {'10 dias': 1242.95, '11 a 15 dias': 955.9, '16 a 20 dias': 847.77, 'acima de 20 dias': 739.74}
+        self.valorLI = {'10 dias': 217.30}
+        self.valorExpurgo = {'10 dias': 177.85}
+        self.iss = 0.05
+      
 
+    @property
+    def variables (self):
+        return (self.valorProcesso, self.valorLI, self.valorExpurgo, self.iss)
+    
+    @variables.setter
+    def variables (self, valorProcesso, valorLI, valorExpurgo, iss):
+        self.valorProcesso = valorProcesso
+        self.valorLI = valorLI
+        self.valorExpurgo = valorExpurgo
+        self.iss = iss
+      
+    
+    def calcular(self,**kwargs):
+        dataEntrada = kwargs.get("dataEntrada")
+        dataSaida = kwargs.get("dataSaida")
+        leadtime = self.getDias(dataEntrada, dataSaida)
+        transportation = kwargs.get("transportation")
+        numLI = kwargs.get("numLI")
+        
+
+        valor = lambda : self.valorProcesso ['acima de 20 dias'] if(leadtime > 20) else self.valorProcesso['16 a 20 dias'] if (leadtime > 15) else self.valorProcesso['11 a 15 dias'] if(leadtime > 10) else self.valorProcesso['10 dias']
+        expurgo = lambda : self.valorExpurgo.get("10 dias") if (transportation == 'SEA') else 0
+        li = self.valorLI.get ("10 dias") * numLI 
+        valorIss = (valor() + expurgo() + li) * self.iss
+        total =  valor() + expurgo() + li + valorIss
+               
+                 
+        return total
 
 
 
@@ -523,11 +561,15 @@ from dicionarioCalculos import dicionarioLibra, dicionarioMulti, dicionarioRioGa
 
 #calc4 = MemCalculoDHL(12, 10, dicionarioDHL['handlingAereo'], dicionarioDHL['delivreyFeeAereo'], 0.05)
 
-#print(calc4.calcular( pesoBruto = "579", transportation="Marítimo", taxaEUR=6.3, taxaUSD=5.0 ))
+#print(calc4.calcular( pesoBruto = "579", transportation="Marítimo", taxaEUR=6.3, taxaUSD=5.0, qtdContainer=1))
 
 #calc4 = MemCalculoDHL()
 
-#print(calc4.calcular( pesoBruto = "579", transportation="Marítimo", taxaEUR=6.3, taxaUSD=5.0 ))
+#print(calc4.calcular( pesoBruto = "579", transportation="Marítimo", taxaEUR=6.3, taxaUSD=5.0, qtdContainer=1))
+
+calc5 = MemCalculoDMS()
+
+print(calc5.calcular( numLI = 1, transportation="SEA", dataEntrada= "2021-03-07", dataSaida= "2021-03-05"))
 
 ##### A Fazer
 #Mudar o construtor para pegar dados padrão ou inseridos pelo usuário #OK
@@ -535,6 +577,7 @@ from dicionarioCalculos import dicionarioLibra, dicionarioMulti, dicionarioRioGa
 #Coordenadas documentos novos ok
 #Modulos paddle(fuzzy/rgx) para notas comex 
 #Confirmar campos a serem extraídos (LIZ)
+#Verificar KN com a Liz
 
 
 
