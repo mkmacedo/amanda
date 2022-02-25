@@ -223,4 +223,50 @@ def calculoRioGaleao(cif, **kwargs):
         total = subArm 
     return total
 
-print(calculoRioGaleao(1191148.14, dias = 3, pesoBruto = 579, pesoLiquido = 172.90))
+#print(calculoRioGaleao(1191148.14, dias = 3, pesoBruto = 579, pesoLiquido = 172.90))
+
+# -------------------------------------------------------------------------------------
+def calculoDHL(**kwargs):
+    handlingAereo = {}
+    delivreyFeAereo = {}
+    taxaAdminMarit = kwargs.get('taxaAdminMarit')
+    CapataMarit = kwargs.get("CapataMarit")
+    taxaUSD = kwargs.get("taxaUSD")
+    taxaEUR = kwargs.get("taxaEUR")
+   
+    handlingAereo = dicionarioDMS.get('handlingAereo')
+  
+    delivreyFeAereo = dicionarioDMS.get('delivreyFeAereo')
+
+    CapataMarit = dicionarioDMS.get('CapataMarit')
+    
+    handlingAereo = {}
+    handlingAereo = handlingAereo
+    delivreyFeeAereo = {}
+    delivreyFeeAereo = delivreyFeeAereo 
+    taxaAdminMarit = {}
+    taxaAdminMarit = taxaAdminMarit 
+    CapataMarit = {}
+    CapataMarit = CapataMarit
+
+
+    pesoBruto = kwargs.get("pesoBruto")
+    subArm = 0
+    percent = 0
+
+    
+        
+    formulaHandlingAereo = lambda : pesoBruto*0.05 if(pesoBruto*0.05  > 40) else 40
+    formulaDelivreyFeeAereo  = lambda : pesoBruto*0.05 if(pesoBruto*0.05  >  28) else 28
+    formaulaPis =  0.1662*(formulaHandlingAereo()+formulaDelivreyFeeAereo())
+    formulaUSD  = formulaHandlingAereo()+formulaDelivreyFeeAereo()+formaulaPis()
+    formulaBRL = lambda: formulaUSD*taxaUSD-(formulaUSD * taxaUSD * 0.015) if(formulaUSD * taxaUSD * 0.015 > 10) else formulaUSD * taxaUSD     
+        
+    formulaPisMarit = 0.1662 * taxaAdminMarit
+    formulaEUR = taxaAdminMarit + formulaPisMarit()
+    formulaBRLMarti = formulaEUR * taxaEUR
+
+    formulaEURBRL = taxaEUR * CapataMarit
+
+
+print(calculoDHL( pesoBruto = 579, taxaUSD = 5374.28))

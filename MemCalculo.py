@@ -458,12 +458,53 @@ class MemCalculoRio(MemCalculo):
         total = format(total, '.2f')
         return total
 
+class MemCalculoDHL(MemCalculo):
+    def __init__(self, taxaAdminMarit=None, capataMarit=None, handlingAereo=None, delivreyFeeAereo=None, iss=None):
+        self.taxaAdminMarit = 98
+        self.capataMarit = 178
+        self.handlingAereo = {'percent': 0.0005, 'min': 40.00}
+        self.delivreyFeeAereo =  {'percent': 0.0005, 'min': 28.00}
+        self.iss = 0.1662
+
+    @property
+    def variables (self):
+        return (self.taxaAdminMarit,  self.capataMarit, self.handlingAereo, self.delivreyFeeAereo, self.iss)
+    
+    @variables.setter
+    def variables (self, taxaAdminMarit, capataMarit, handlingAereo, delivreyFeeAereo, iss):
+        self.handlingAereo = handlingAereo
+        self.delivreyFeeAereo = delivreyFeeAereo
+        self.taxaAdminMarit = taxaAdminMarit
+        self.capataMarit = capataMarit
+        self.iss = iss
+    
+    
+    def calcular(self,**kwargs):
+        transportation = kwargs.get("transportation")
+        pesoBruto = kwargs.get("pesoBruto")
+
+        if transportation == "Marítimo":
+            taxaEUR = kwargs.get("taxaEUR")
+            formulaPisMarit = self.iss * self.taxaAdminMarit
+            formulaEUR = self.taxaAdminMarit + formulaPisMarit
+            formulaEURBRL = formulaEUR * taxaEUR
+            valorBRL = lambda: taxaEUR * self.capataMarit
+        
+        elif transportation == "Aéreo":
+            taxaUSD = kwargs.get("taxaUSD")
+            formulaHandlingAereo = lambda : pesoBruto*self.handlingAereo.get("percent") if(pesoBruto*self.handlingAereo.get("percent")  > self.handlingAereo.get("min")) else self.handlingAereo.get("min")
+            formulaDeliveryFeeAereo  = lambda : pesoBruto*self.delivreyFeeAereo.get("percent") if(pesoBruto*self.delivreyFeeAereo.get("percent")  >  self.delivreyFeeAereo.get("percent")) else self.delivreyFeeAereo.get("min")
+            formaulaPis =  self.iss*(formulaHandlingAereo()+formulaDeliveryFeeAereo())
+            formulaUSD  = formulaHandlingAereo()+formulaDeliveryFeeAereo()+formaulaPis()
+            valorBRL = lambda: formulaUSD*taxaUSD-(formulaUSD * taxaUSD * 0.015) if(formulaUSD * taxaUSD * 0.015 > 10) else formulaUSD * taxaUSD     
+            
+        return valorBRL()
 
 
 
 
 
-from dicionarioCalculos import dicionarioLibra, dicionarioMulti, dicionarioRioGaleao
+from dicionarioCalculos import dicionarioLibra, dicionarioMulti, dicionarioRioGaleao, dicionarioDHL
 #calc = MemCalculoLibra(dicionarioLibra['valoresPorPeriodo20'], dicionarioLibra['valoresPorPeriodo40'], dicionarioLibra['servicosAdi20'], dicionarioLibra['servicosAdi40'], dicionarioLibra['quantServAdic'])
 #print(calc.calcular(1712602.58, container = '40', taxaConver = 5.2585, dias= 2))
 #
@@ -475,18 +516,25 @@ from dicionarioCalculos import dicionarioLibra, dicionarioMulti, dicionarioRioGa
 #x = MemCalculo()
 #print(x.getDias('2021-09-13 00:00:00', '2021-09-16 00:00:00'))
 #dataEntrada, dataSaida, pesoBruto, pesoLiq, cif, valor = getRow('PLANILHA - 2 QZ SETEMBRO 2021#.xlsx',1191148.14)
-calc3 = MemCalculoRio(dicionarioRioGaleao['valoresPorPeriodo'], dicionarioRioGaleao['pesoLiquido'])
+#calc3 = MemCalculoRio(dicionarioRioGaleao['valoresPorPeriodo'], dicionarioRioGaleao['pesoLiquido'])
 
-print(calc3.calcular("1191148.14", dataEntrada = "2021-10-03",dataSaida="2021-10-05", pesoBruto = "579", pesoLiquido = "172.90"))
+#print(calc3.calcular("1191148.14", dataEntrada = "2021-10-03",dataSaida="2021-10-05", pesoBruto = "579", pesoLiquido = "172.90"))
 #print(calc3.calcular(cif, dataEntrada=dataEntrada, dataSaida=dataSaida, pesoBruto=pesoBruto, pesoLiquido=pesoLiq))
 
+#calc4 = MemCalculoDHL(12, 10, dicionarioDHL['handlingAereo'], dicionarioDHL['delivreyFeeAereo'], 0.05)
+
+#print(calc4.calcular( pesoBruto = "579", transportation="Marítimo", taxaEUR=6.3, taxaUSD=5.0 ))
+
+#calc4 = MemCalculoDHL()
+
+#print(calc4.calcular( pesoBruto = "579", transportation="Marítimo", taxaEUR=6.3, taxaUSD=5.0 ))
 
 ##### A Fazer
 #Mudar o construtor para pegar dados padrão ou inseridos pelo usuário #OK
 #Outros fornecedores: DHL, KN, API Bacen
-#Coordenadas documentos novos
-#Modulos paddle(fuzzy/rgx) para notas comex
-#Confirmar campos a serem extraídos
+#Coordenadas documentos novos ok
+#Modulos paddle(fuzzy/rgx) para notas comex 
+#Confirmar campos a serem extraídos (LIZ)
 
 
 
