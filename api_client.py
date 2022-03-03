@@ -27,8 +27,9 @@ class API_Client():
 #a = API_Client('http://127.0.0.1:5000/Libra?cif=1712602.58&container=40&taxaConver=5.2585&dias=2').result
 #a = API_Client('http://127.0.0.1:5000/Multi?cif=1689043.88&container=40&dias=4').result
 
-a = API_Client('http://127.0.0.1:5000/DHL?pesoBruto=579&transportation=Marítimo&taxaEUR=6.3&taxaUSD=5.0&qtdContainer=1').result
+#a = API_Client('http://127.0.0.1:5000/DHL?pesoBruto=579&transportation=Marítimo&taxaEUR=6.3&taxaUSD=5.0&qtdContainer=1').result
 
+a = API_Client('http://127.0.0.1:5000/DMS?numLI=1&transportation=SEA&dataEntrada=2021-03-07&dataSaida=2021-03-05').result
 
 print(a)
 

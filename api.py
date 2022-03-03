@@ -69,6 +69,24 @@ class MemCalcDHL(Resource):
         result = data.calcular(pesoBruto=args['pesoBruto'], transportation=str(args['transportation']), taxaEUR=args['taxaEUR'], taxaUSD=args['taxaUSD'], qtdContainer=args['qtdContainer'] )
         return {'data': result}, 200
 
+class MemCalcDMS(Resource):
+#    def __init__(self):
+#        pass
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('numLI', required=True)
+        parser.add_argument('transportation', required=True)
+        parser.add_argument('dataEntrada', required=True)
+        parser.add_argument('dataSaida', required=True)
+        args = parser.parse_args()
+
+        data = MemCalculo.MemCalculoDMS()
+        result = data.calcular(numLI=args['numLI'], transportation=str(args['transportation']), dataEntrada=args['dataEntrada'], dataSaida=args['dataSaida'])
+        return {'data': result}, 200
+
+
+
+api.add_resource(MemCalcDMS, '/DMS')
 
 api.add_resource(MemCalcDHL, '/DHL')
 
