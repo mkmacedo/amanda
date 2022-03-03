@@ -8,6 +8,8 @@ class MemCalculo:
     def __init__(self):
         self.valoresPeriodos = {}
     def getNumPeriodos(self,dias):
+        if type(dias)==type('str'):
+            dias = eval(dias)
         l = lambda: 1 if dias % 7 > 0 else 0
         numPeriodos = dias // 7 + l()
         return numPeriodos
@@ -175,9 +177,12 @@ class MemCalculoLibra(MemCalculo):
 
 
     def calcular(self, cif, **kwargs):        
-
+        if(type(cif) == type('str')):
+            cif = eval(cif)
         container = kwargs.get("container")
-        dias = eval(kwargs.get("dias"))
+        dias = kwargs.get("dias")
+        if type(dias) == type('str'):
+            dias = int(kwargs.get("dias"))
         numPeriodos = self.getNumPeriodos(dias)
         variaveisPeriodo = {}
         variaveisPeriodo['20'] = self.variaveisPeriodoC20
@@ -185,7 +190,9 @@ class MemCalculoLibra(MemCalculo):
         servicosAdi = {}
         servicosAdi['20'] = self.servicosAdic20
         servicosAdi['40'] = self.servicosAdic40
-        taxaConver = eval(kwargs.get("taxaConver"))
+        taxaConver = kwargs.get("taxaConver")
+        if type(taxaConver) == type('str'):
+            taxaConver = eval(kwargs.get("taxaConver"))
 
         if(container == '40'):
             formulaPeriodos = lambda taxaConver,x, taxaConteiner, valorMinimo, valorFixo: (((taxaConteiner*x*taxaConver) + valorFixo )/0.8575) if((taxaConteiner*x*taxaConver) > valorMinimo) else (valorMinimo + valorFixo)/0.8575
@@ -201,6 +208,12 @@ class MemCalculoLibra(MemCalculo):
         lacre = formulaSerAdic(self.quantServicAdic[4].get('quantLacre'), servicosAdi[container][5].get('lacre'))
         insInvasiva = formulaSerAdic(self.quantServicAdic[6].get('quabtInsInvasiva'), servicosAdi[container][4].get('insInvasiva'))
         transito = formulaSerAdic(self.quantServicAdic[7].get('quantTransito'), servicosAdi[container][7].get('transito'))
+        print('REEFER1',self.quantServicAdic[3].get('quantReefer'))
+        print('REEFER2',servicosAdi[container][6].get('reefer'))
+        print('REEFER3',dias)
+        print('REEFER1',type(self.quantServicAdic[3].get('quantReefer')))
+        print('REEFER2',type(servicosAdi[container][6].get('reefer')))
+        print('REEFER3',type(dias))
         reefer = formulaReefer(self.quantServicAdic[3].get('quantReefer'), servicosAdi[container][6].get('reefer'))
         posicionamento = formulaSerAdic(self.quantServicAdic[5].get('quantPosi'), servicosAdi[container][3].get('posicionamento'))
         subAdi = carregamento + pesagem + lacre + reefer + posicionamento + insInvasiva + transito
@@ -209,6 +222,14 @@ class MemCalculoLibra(MemCalculo):
         valorPerAdic = 0
         for i in range(numPeriodos):
             if i + 1 <= 1:
+                print('220_',taxaConver)
+                print('220_',cif)
+                print('220_',variaveisPeriodo[container][i + 1].get('min'))
+                print('220_',self.quantServicAdic[8]['valorFixo'])
+                print('220_',type(taxaConver))
+                print('220_',type(cif))
+                print('220_',type(variaveisPeriodo[container][i + 1].get('min')))
+                print('220_',type(self.quantServicAdic[8]['valorFixo']))
                 subArm += formulaPeriodos(taxaConver,cif, variaveisPeriodo[container][i + 1].get('percent'), variaveisPeriodo[container][i + 1].get('min'), valorFixo = self.quantServicAdic[8]['valorFixo'])
                 valorPerAdic = formulaPeriodos(taxaConver,cif, variaveisPeriodo[container][i + 1].get('percent'), variaveisPeriodo[container][i + 1].get('min'),valorFixo = self.quantServicAdic[8]['valorFixo'])
                 #res.append(formula(cif, variaveisPeriodo[container][i + 1].get('percent'), variaveisPeriodo[container][i + 1].get('min')))

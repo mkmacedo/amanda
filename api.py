@@ -1,6 +1,7 @@
 import MemCalculo
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
+from icecream import ic
 
 app = Flask(__name__)
 api = Api(app)
@@ -34,8 +35,7 @@ class MemCalcLibra(Resource):
         args = parser.parse_args()
 
         data = MemCalculo.MemCalculoLibra()
-        result = data.calcular(args['cif'], container=args['container'], taxaConver=args['taxaConver'], dias=args['dias'])
-        result = '{:.2f}'.format(result)
+        result = data.calcular(args['cif'], container=str(args['container']), taxaConver=args['taxaConver'], dias=args['dias'])
         return {'data': result}, 200
 
 
