@@ -24,7 +24,8 @@ class API_Client():
 
 #a = API_Client('http://127.0.0.1:5000/Rio?cif=1191148.14&dataEntrada=2021-10-03&dataSaida=2021-10-05&dataSaida=2021-10-05&pesoBruto=579&pesoLiquido=172.90').result
 #a = API_Client('http://127.0.0.1:5000/Rio').result
+#a = API_Client('http://127.0.0.1:5000/Libra?cif=1712602.58&container=40&taxaConver=5.2585&dias=2').result
 
-a = API_Client('http://127.0.0.1:5000/Libra?cif=1712602.58&container=40&taxaConver=5.2585&dias=2').result
+a = API_Client('http://127.0.0.1:5000/Multi?cif=1689043.88&container=40&dias=4').result
 print(a)
 

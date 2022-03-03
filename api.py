@@ -39,6 +39,23 @@ class MemCalcLibra(Resource):
         return {'data': result}, 200
 
 
+class MemCalcMulti(Resource):
+#    def __init__(self):
+#        pass
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('cif', required=True)
+        parser.add_argument('container', required=True)
+        parser.add_argument('dias', required=True)
+        args = parser.parse_args()
+
+        data = MemCalculo.MemCalculoMulti()
+        result = data.calcular(args['cif'], container=str(args['container']), dias=args['dias'])
+        return {'data': result}, 200
+
+
+api.add_resource(MemCalcMulti, '/Multi')
+
 api.add_resource(MemCalcRio, '/Rio')
 
 api.add_resource(MemCalcLibra, '/Libra')
