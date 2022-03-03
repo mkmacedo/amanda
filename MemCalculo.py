@@ -1,4 +1,3 @@
-from sqlalchemy import except_all
 from excelExtraciton import getRow
 from datetime import datetime
 import traceback
@@ -88,93 +87,91 @@ class MemCalculo:
 
 
 class MemCalculoLibra(MemCalculo):
-    def __init__(self,valoresPorPeriodo20=None, valoresPorPeriodo40=None, servicosAdi20=None, servicosAdi40=None, quantServAdic=None):
-        valoresPorPeriodo20 =[{'percent': 0.0034, 'min': 1138.27},
+    def __init__(self, varJson=None):
+        varJson = {'valoresPorPeriodo20' :[{'percent': 0.0034, 'min': 1138.27},
                         {'percent': 0.0066, 'min': 1252.11},
                         {'percent': 0.0136, 'min': 1377.30},
-                        {'percent': 0.0174, 'min': 1515.03}]
-        valoresPorPeriodo40 = [{'percent': 0.0034, 'min': 1707.40},
-                        {'percent': 0.0066, 'min': 1878.14},
-                        {'percent': 0.0136, 'min': 2065.94},
-                        {'percent': 0.0174, 'min': 2272.54}]
-        servicosAdi20 = [{'carregamento': 529.19},
-                        {'pesagemCTNR': 117.99},
-                        {'posicionamento': 476.47},
-                        {'insInvasiva': 314.85},
-                        {'lacre': 60.30 },
-                        {'reefer': 319.45},
-                        {'transito': 447.45}]
+                        {'percent': 0.0174, 'min': 1515.03}],
 
-        servicosAdi40 = [{'carregamento': 529.19},
-                        {'pesagemCTNR': 117.99},
-                        {'posicionamento': 476.47},
-                        {'insInvasiva': 314.85},
-                        {'lacre': 60.30 },
-                        {'reefer': 319.45},
-                        {'transito': 447.45}]
+                    'valoresPorPeriodo40' : [{'percent': 0.0034, 'min': 1707.40},
+                                    {'percent': 0.0066, 'min': 1878.14},
+                                    {'percent': 0.0136, 'min': 2065.94},
+                                    {'percent': 0.0174, 'min': 2272.54}],
+                                    
+                    'servicosAdi20' : [{'carregamento': 529.19},
+                                    {'pesagemCTNR': 117.99},
+                                    {'posicionamento': 476.47},
+                                    {'insInvasiva': 314.85},
+                                    {'lacre': 60.30 },
+                                    {'reefer': 319.45},
+                                    {'transito': 447.45}],
 
-        quantServAdic = [{'quantCarregamento': 1 },
-                        {'quantPesagem': 1},
-                        {'quantReefer': 1},
-                        {'quantLacre': 0 },
-                        {'quantPosi': 0},
-                        {'quabtInsInvasiva': 1},
-                        {'quantTransito' : 1},
-                        {'valorFixo': 351.11}]
+                    'servicosAdi40' : [{'carregamento': 529.19},
+                                    {'pesagemCTNR': 117.99},
+                                    {'posicionamento': 476.47},
+                                    {'insInvasiva': 314.85},
+                                    {'lacre': 60.30 },
+                                    {'reefer': 319.45},
+                                    {'transito': 447.45}],
+
+                    'quantServAdic' : [{'quantCarregamento': 1 },
+                                    {'quantPesagem': 1},
+                                    {'quantReefer': 1},
+                                    {'quantLacre': 0 },
+                                    {'quantPosi': 0},
+                                    {'quabtInsInvasiva': 1},
+                                    {'quantTransito' : 1},
+                                    {'valorFixo': 351.11}]
+                    }
 
         self.variaveisPeriodoC20 = {}
         self.variaveisPeriodoC40 = {}
         self.servicosAdic20 = {}
         self.servicosAdic40 = {}
-        self.quantServicAdic = {}
+        self.quantServicAdic = {}   
 
-        for i in range(len(valoresPorPeriodo20)):
-            self.variaveisPeriodoC20[i + 1] = valoresPorPeriodo20[i]
+        for i in range(len(varJson['valoresPorPeriodo20'])):
+            self.variaveisPeriodoC20[i + 1] = varJson['valoresPorPeriodo20'][i]
     
-        for i in range(len(valoresPorPeriodo40)):
-            self.variaveisPeriodoC40[i + 1] = valoresPorPeriodo20[i] 
+        for i in range(len(varJson['valoresPorPeriodo20'])):
+            self.variaveisPeriodoC40[i + 1] = varJson['valoresPorPeriodo20'][i] 
 
-        for i in range(len(servicosAdi20)):
-            self.servicosAdic20[i + 1] = servicosAdi20[i]
+        for i in range(len(varJson['servicosAdi20'])):
+            self.servicosAdic20[i + 1] = varJson['servicosAdi20'][i]
             
-        for i in range(len(servicosAdi40)):
-            self.servicosAdic40[i + 1] = servicosAdi40[i]
+        for i in range(len(varJson['servicosAdi40'])):
+            self.servicosAdic40[i + 1] = varJson['servicosAdi40'][i]
 
-        for i in range(len(quantServAdic)):
-            self.quantServicAdic[i + 1] = quantServAdic[i]
+        for i in range(len(varJson['quantServAdic'])):
+            self.quantServicAdic[i + 1] = varJson['quantServAdic'][i]
 
     @property
     def variables (self):
-        return ( self.variaveisPeriodoC20, self.variaveisPeriodoC40, self.servicosAdic20, self.servicosAdic40, self.quantServicAdic)
+        return (self.variaveisPeriodoC20, self.variaveisPeriodoC40, self.servicosAdic20, self.servicosAdic40, self.quantServicAdic)
 
 
     @variables.setter
-    def variables (self, valoresPorPeriodo20, valoresPorPeriodo40, servicosAdi20, servicosAdi40, quantServAdic):
-        self.valoresPorPeriodos20 = valoresPorPeriodo20
-        self.valoresPorPeriodos40 = valoresPorPeriodo40
-        self.servicosAdi20 = servicosAdi20
-        self.servicosAdi40 = servicosAdi40
-        self.quantServAdic = quantServAdic
+    def variables (self, varJson):
         self.variaveisPeriodoC20 = {}
         self.variaveisPeriodoC40 = {}
         self.servicosAdic20 = {}
         self.servicosAdic40 = {}
         self.quantServicAdic = {}
 
-        for i in range(len(valoresPorPeriodo20)):
-            self.variaveisPeriodoC20[i + 1] = valoresPorPeriodo20[i]
+        for i in range(len(varJson.get('valoresPorPeriodo20'))):
+            self.variaveisPeriodoC20[i + 1] = varJson.get('valoresPorPeriodo20')[i]
     
-        for i in range(len(valoresPorPeriodo40)):
-            self.variaveisPeriodoC40[i + 1] = valoresPorPeriodo20[i] 
+        for i in range(len(varJson.get('valoresPorPeriodo40'))):
+            self.variaveisPeriodoC40[i + 1] = varJson.get('valoresPorPeriodo40')[i] 
 
-        for i in range(len(servicosAdi20)):
-            self.servicosAdic20[i + 1] = servicosAdi20[i]
+        for i in range(len(varJson('servicosAdi20'))):
+            self.servicosAdic20[i + 1] = varJson('servicosAdi20')[i]
             
-        for i in range(len(servicosAdi40)):
-            self.servicosAdic40[i + 1] = servicosAdi40[i]
+        for i in range(len(varJson.get('servicosAdi40'))):
+            self.servicosAdic40[i + 1] = varJson.get('servicosAdi40')[i]
 
-        for i in range(len(quantServAdic)):
-            self.quantServicAdic[i + 1] = quantServAdic[i]
+        for i in range(len(varJson('quantServAdic'))):
+            self.quantServicAdic[i + 1] = varJson('quantServAdic')[i]
 
 
     def calcular(self, cif, **kwargs):        
@@ -239,37 +236,42 @@ class MemCalculoLibra(MemCalculo):
 
 
 class MemCalculoMulti(MemCalculo):
-    def __init__(self):
-        valoresPorPeriodo20 = [{'percent': 0.0041, 'min': 1611.22},
-                                {'percent': 0.0076, 'min': 1384.42},
-                                {'percent': 0.0140, 'min': 1522.87},
-                                {'percent': 0.0180, 'min': 1675.16}]
-        valoresPorPeriodo40 = [{'percent': 0.0041, 'min': 1741.44},
-                                {'percent': 0.0076, 'min': 1527.68},
-                                {'percent': 0.0140, 'min': 1680.45},
-                                {'percent': 0.0180, 'min': 1848.48}]
-        servicosAdi20 = [{'carregamento': 383.67},
-                            {'pesagem': 94.00 },
-                            {'posicionamento': 300.92},
-                            {'desunitizacao': 300.92},
-                            {'lacre': 45.13 },
-                            {'reefer': 290.58},
-                            {'aliquota': 0.166181955726821}]
+    def __init__(self, varJson=None):
+        varJson = {
+            'valoresPorPeriodo20': [{'percent': 0.0041, 'min': 1611.22},
+                                    {'percent': 0.0076, 'min': 1384.42},
+                                    {'percent': 0.0140, 'min': 1522.87},
+                                    {'percent': 0.0180, 'min': 1675.16}],
 
-        servicosAdi40 = [{'carregamento': 383.67},
-                            {'pesagem': 94.00 },
-                            {'posicionamento': 476.47},
-                            {'desunitizacao': 476.47},
-                            {'lacre': 45.13 },
-                            {'reefer': 290.58},
-                            {'aliquota': 0.166181955726821}]
+            'valoresPorPeriodo40': [{'percent': 0.0041, 'min': 1741.44},
+                                    {'percent': 0.0076, 'min': 1527.68},
+                                    {'percent': 0.0140, 'min': 1680.45},
+                                    {'percent': 0.0180, 'min': 1848.48}],
 
-        quantServAdic = [{'quantContainer': 1},
-                            {'quantCarregamento': 1},
-                            {'quantPesagem': 1},
-                            {'quantReefer': 1},
-                            {'quantLacre': 0 },
-                            {'quantPosi': 0}]
+            'servicosAdi20': [{'carregamento': 383.67},
+                                {'pesagem': 94.00 },
+                                {'posicionamento': 300.92},
+                                {'desunitizacao': 300.92},
+                                {'lacre': 45.13 },
+                                {'reefer': 290.58},
+                                {'aliquota': 0.166181955726821}],
+
+            'servicosAdi40': [{'carregamento': 383.67},
+                                {'pesagem': 94.00 },
+                                {'posicionamento': 476.47},
+                                {'desunitizacao': 476.47},
+                                {'lacre': 45.13 },
+                                {'reefer': 290.58},
+                                {'aliquota': 0.166181955726821}],
+
+            'quantServAdic': [{'quantContainer': 1},
+                                {'quantCarregamento': 1},
+                                {'quantPesagem': 1},
+                                {'quantReefer': 1},
+                                {'quantLacre': 0 },
+                                {'quantPosi': 0}]
+
+            }
 
         self.variaveisPeriodoC20 = {}
         self.variaveisPeriodoC40 = {}
@@ -277,52 +279,47 @@ class MemCalculoMulti(MemCalculo):
         self.servicosAdic40 = {}
         self.quantServicAdic = {}
 
-        for i in range(len(valoresPorPeriodo20)):
-            self.variaveisPeriodoC20[i + 1] = valoresPorPeriodo20[i]
+        for i in range(len(varJson.get('valoresPorPeriodo20'))):
+            self.variaveisPeriodoC20[i + 1] = varJson.get('valoresPorPeriodo20')[i]
     
-        for i in range(len(valoresPorPeriodo40)):
-            self.variaveisPeriodoC40[i + 1] = valoresPorPeriodo20[i] 
+        for i in range(len(varJson.get('valoresPorPeriodo40'))):
+            self.variaveisPeriodoC40[i + 1] = varJson.get('valoresPorPeriodo40')[i] 
 
-        for i in range(len(servicosAdi20)):
-            self.servicosAdic20[i + 1] = servicosAdi20[i]
+        for i in range(len(varJson.get('servicosAdi20'))):
+            self.servicosAdic20[i + 1] = varJson.get('servicosAdi20')[i]
             
-        for i in range(len(servicosAdi40)):
-            self.servicosAdic40[i + 1] = servicosAdi40[i]
+        for i in range(len(varJson.get('servicosAdi40'))):
+            self.servicosAdic40[i + 1] = varJson.get('servicosAdi40')[i]
 
-        for i in range(len(quantServAdic)):
-            self.quantServicAdic[i + 1] = quantServAdic[i]
+        for i in range(len(varJson.get('quantServAdic'))):
+            self.quantServicAdic[i + 1] = varJson.get('quantServAdic')[i]
 
     @property
     def variables(self):                   
-        return (self.variaveisPeriodoC20, self.variaveisPeriodoC40, self.servicosAdi20, self.servicosAdi40, self.quantServAdic)   
+        return (self.variaveisPeriodoC20, self.variaveisPeriodoC40, self.servicosAdic20, self.servicosAdic40, self.quantServicAdic)   
 
     @variables.setter
-    def variables(self,valoresPorPeriodo20, valoresPorPeriodo40, servicosAdi20, servicosAdi40, quantServAdic):
-        self.valoresPorPeriodos20 = valoresPorPeriodo20
-        self.valoresPorPeriodos40 = valoresPorPeriodo40
-        self.servicosAdi20 = servicosAdi20
-        self.servicosAdi40 = servicosAdi40
-        self.quantServAdic = quantServAdic
+    def variables(self, varJson):
         self.variaveisPeriodoC20 = {}
         self.variaveisPeriodoC40 = {}
         self.servicosAdic20 = {}
         self.servicosAdic40 = {}
         self.quantServicAdic = {}
 
-        for i in range(len(valoresPorPeriodo20)):
-            self.variaveisPeriodoC20[i + 1] = valoresPorPeriodo20[i]
+        for i in range(len(varJson.get('valoresPorPeriodo20'))):
+            self.variaveisPeriodoC20[i + 1] = varJson.get('valoresPorPeriodo20')[i]
     
-        for i in range(len(valoresPorPeriodo40)):
-            self.variaveisPeriodoC40[i + 1] = valoresPorPeriodo20[i] 
+        for i in range(len(varJson.get('valoresPorPeriodo40'))):
+            self.variaveisPeriodoC40[i + 1] = varJson.get('valoresPorPeriodo40')[i] 
 
-        for i in range(len(servicosAdi20)):
-            self.servicosAdic20[i + 1] = servicosAdi20[i]
+        for i in range(len(varJson.get('servicosAdi20'))):
+            self.servicosAdic20[i + 1] = varJson.get('servicosAdi20')[i]
             
-        for i in range(len(servicosAdi40)):
-            self.servicosAdic40[i + 1] = servicosAdi40[i]
+        for i in range(len(varJson.get('servicosAdi40'))):
+            self.servicosAdic40[i + 1] = varJson.get('servicosAdi40')[i]
 
-        for i in range(len(quantServAdic)):
-            self.quantServicAdic[i + 1] = quantServAdic[i]
+        for i in range(len(varJson.get('quantServAdic'))):
+            self.quantServicAdic[i + 1] = varJson.get('quantServAdic')[i]
 
     def calcular(self, cif, **kwargs):
 
@@ -374,8 +371,9 @@ class MemCalculoMulti(MemCalculo):
 
 
 class MemCalculoRio(MemCalculo):
-    def __init__(self, valoresPorPeriodo=None, pesoLiquido=None):
-        valoresPorPeriodo = [{'percent': 0.0075},
+    def __init__(self, varJson=None):
+        varJson = {
+                'valoresPorPeriodo': [{'percent': 0.0075},
                         {'percent': 0.0150},
                         {'percent': 0.0225},
                         {'percent': 0.0450},
@@ -384,34 +382,35 @@ class MemCalculoRio(MemCalculo):
                         {'percent': 0.1125},
                         {'percent': 0.1350},
                         {'percent': 0.1575},
-                        {'percent': 0.1800}]
+                        {'percent': 0.1800}],
 
-        pesoLiquido = [{'percent': 0.0060, 'min': 19999.99 },
-                        {'percent': 0.0030, 'min': 79999.99},
-                        {'percent': 0.0015, 'min': 80000.00}]
+                'pesoLiquido': [{'percent': 0.0060, 'min': 19999.99 },
+                                {'percent': 0.0030, 'min': 79999.99},
+                                {'percent': 0.0015, 'min': 80000.00}]
+                }
         self.variaveisPeriodo = {}
         self.variaveisPesoLiquido = {}
 
-        for i in range(len(valoresPorPeriodo)):
-            self.variaveisPeriodo[i + 1] = valoresPorPeriodo[i]
+        for i in range(len(varJson.get('valoresPorPeriodo'))):
+            self.variaveisPeriodo[i + 1] = varJson.get('valoresPorPeriodo')[i]
         
-        for i in range(len(pesoLiquido)):
-            self.variaveisPesoLiquido[i + 1] = pesoLiquido[i]
+        for i in range(len(varJson.get('pesoLiquido'))):
+            self.variaveisPesoLiquido[i + 1] = varJson.get('pesoLiquido')[i]
 
     @property 
     def varibles(self):
         return(self.variaveisPeriodo, self.variaveisPesoLiquido)
     
     @varibles.setter
-    def varibles(self, valoresPorPeriodo, pesoLiquido):
+    def varibles(self, varJson):
         self.variaveisPeriodo = {}
         self.variaveisPesoLiquido = {}
 
-        for i in range(len(valoresPorPeriodo)):
-            self.variaveisPeriodo[i + 1] = valoresPorPeriodo[i]
+        for i in range(len(varJson.get('valoresPorPeriodo'))):
+            self.variaveisPeriodo[i + 1] = varJson.get('valoresPorPeriodo')[i]
         
-        for i in range(len(pesoLiquido)):
-            self.variaveisPesoLiquido[i + 1] = pesoLiquido[i]
+        for i in range(len(varJson.get('pesoLiquido'))):
+            self.variaveisPesoLiquido[i + 1] = varJson.get('pesoLiquido')[i]
 
     def calcular(self, cif, **kwargs):
         cif = eval(cif)
@@ -458,24 +457,31 @@ class MemCalculoRio(MemCalculo):
         return total
 
 class MemCalculoDHL(MemCalculo):
-    def __init__(self, taxaAdminMarit=None, capataMarit=None, handlingAereo=None, delivreyFeeAereo=None, iss=None):
-        self.taxaAdminMarit = 98
-        self.capataMarit = 178
-        self.handlingAereo = {'percent': 0.0005, 'min': 40.00}
-        self.delivreyFeeAereo =  {'percent': 0.0005, 'min': 28.00}
-        self.iss = 0.1662
+    def __init__(self, varJson=None):
+        varJson = {
+            'taxaAdminMarit': 98,
+            'capataMarit': 178,
+            'handlingAereo': {'percent': 0.0005, 'min': 40.00},
+            'delivreyFeeAereo': {'percent': 0.0005, 'min': 28.00},
+            'iss': 0.1662
+        }
+        self.taxaAdminMarit = varJson.get('taxaAdminMarit')
+        self.capataMarit = varJson.get('capataMarit')
+        self.handlingAereo = varJson.get('handlingAereo')
+        self.delivreyFeeAereo =  varJson.get('handlingAereo')
+        self.iss = varJson.get('iss')
 
     @property
     def variables (self):
-        return (self.taxaAdminMarit,  self.capataMarit, self.handlingAereo, self.delivreyFeeAereo, self.iss)
+        return (self.taxaAdminMarit, self.capataMarit, self.handlingAereo, self.delivreyFeeAereo, self.iss)
     
     @variables.setter
-    def variables (self, taxaAdminMarit, capataMarit, handlingAereo, delivreyFeeAereo, iss):
-        self.handlingAereo = handlingAereo
-        self.delivreyFeeAereo = delivreyFeeAereo
-        self.taxaAdminMarit = taxaAdminMarit
-        self.capataMarit = capataMarit
-        self.iss = iss
+    def variables (self, varJson):
+        self.taxaAdminMarit = varJson.get('taxaAdminMarit')
+        self.capataMarit = varJson.get('capataMarit')
+        self.handlingAereo = varJson.get('handlingAereo')
+        self.delivreyFeeAereo =  varJson.get('handlingAereo')
+        self.iss = varJson.get('iss')
     
     
     def calcular(self,**kwargs):
@@ -504,11 +510,18 @@ class MemCalculoDHL(MemCalculo):
             #multiplica container?
 
 class MemCalculoDMS(MemCalculo):
-    def __init__(self, valorProcesso=None, valorLI=None, valorExpurgo=None, iss= None):
-        self.valorProcesso = {'10 dias': 1242.95, '11 a 15 dias': 955.9, '16 a 20 dias': 847.77, 'acima de 20 dias': 739.74}
-        self.valorLI = {'10 dias': 217.30}
-        self.valorExpurgo = {'10 dias': 177.85}
-        self.iss = 0.05
+    def __init__(self, varJson=None):
+        varJson = {
+                    'valorProcesso': {'10 dias': 1242.95, '11 a 15 dias': 955.9, '16 a 20 dias': 847.77, 'acima de 20 dias': 739.74},
+                    'valorLI': {'10 dias': 217.30},
+                    'valorExpurgo': {'10 dias': 177.85},
+                    'iss': 0.05
+                    }
+
+        self.valorProcesso = varJson.get('valorProcesso')
+        self.valorLI = varJson.get('valorLI')
+        self.valorExpurgo = varJson.get('valorExpurgo')
+        self.iss = varJson.get('iss')
       
 
     @property
@@ -516,11 +529,11 @@ class MemCalculoDMS(MemCalculo):
         return (self.valorProcesso, self.valorLI, self.valorExpurgo, self.iss)
     
     @variables.setter
-    def variables (self, valorProcesso, valorLI, valorExpurgo, iss):
-        self.valorProcesso = valorProcesso
-        self.valorLI = valorLI
-        self.valorExpurgo = valorExpurgo
-        self.iss = iss
+    def variables (self, varJson):
+        self.valorProcesso = varJson.get('valorProcesso')
+        self.valorLI = varJson.get('valorLI')
+        self.valorExpurgo = varJson.get('valorExpurgo')
+        self.iss = varJson.get('iss')
       
     
     def calcular(self,**kwargs):
@@ -542,8 +555,10 @@ class MemCalculoDMS(MemCalculo):
 
 
 
-from dicionarioCalculos import dicionarioLibra, dicionarioMulti, dicionarioRioGaleao, dicionarioDHL
+#from dicionarioCalculos import dicionarioLibra, dicionarioMulti, dicionarioRioGaleao, dicionarioDHL
 #calc = MemCalculoLibra(dicionarioLibra['valoresPorPeriodo20'], dicionarioLibra['valoresPorPeriodo40'], dicionarioLibra['servicosAdi20'], dicionarioLibra['servicosAdi40'], dicionarioLibra['quantServAdic'])
+#calc = MemCalculoLibra()
+
 #print(calc.calcular(1712602.58, container = '40', taxaConver = 5.2585, dias= 2))
 #
 #calc2 = MemCalculoMulti(dicionarioMulti['valoresPorPeriodo40'], dicionarioMulti['valoresPorPeriodo40'], dicionarioMulti['servicosAdi20'], dicionarioMulti['servicosAdi40'], dicionarioMulti['quantServAdic'])
@@ -555,6 +570,7 @@ from dicionarioCalculos import dicionarioLibra, dicionarioMulti, dicionarioRioGa
 #print(x.getDias('2021-09-13 00:00:00', '2021-09-16 00:00:00'))
 #dataEntrada, dataSaida, pesoBruto, pesoLiq, cif, valor = getRow('PLANILHA - 2 QZ SETEMBRO 2021#.xlsx',1191148.14)
 #calc3 = MemCalculoRio(dicionarioRioGaleao['valoresPorPeriodo'], dicionarioRioGaleao['pesoLiquido'])
+#calc3 = MemCalculoRio()
 
 #print(calc3.calcular("1191148.14", dataEntrada = "2021-10-03",dataSaida="2021-10-05", pesoBruto = "579", pesoLiquido = "172.90"))
 #print(calc3.calcular(cif, dataEntrada=dataEntrada, dataSaida=dataSaida, pesoBruto=pesoBruto, pesoLiquido=pesoLiq))
@@ -567,9 +583,9 @@ from dicionarioCalculos import dicionarioLibra, dicionarioMulti, dicionarioRioGa
 
 #print(calc4.calcular( pesoBruto = "579", transportation="Marítimo", taxaEUR=6.3, taxaUSD=5.0, qtdContainer=1))
 
-calc5 = MemCalculoDMS()
+#calc5 = MemCalculoDMS()
 
-print(calc5.calcular( numLI = 1, transportation="SEA", dataEntrada= "2021-03-07", dataSaida= "2021-03-05"))
+#print(calc5.calcular( numLI = 1, transportation="SEA", dataEntrada= "2021-03-07", dataSaida= "2021-03-05"))
 
 ##### A Fazer
 #Mudar o construtor para pegar dados padrão ou inseridos pelo usuário #OK
