@@ -177,7 +177,7 @@ class MemCalculoLibra(MemCalculo):
     def calcular(self, cif, **kwargs):        
 
         container = kwargs.get("container")
-        dias = kwargs.get("dias")
+        dias = eval(kwargs.get("dias"))
         numPeriodos = self.getNumPeriodos(dias)
         variaveisPeriodo = {}
         variaveisPeriodo['20'] = self.variaveisPeriodoC20
@@ -185,7 +185,7 @@ class MemCalculoLibra(MemCalculo):
         servicosAdi = {}
         servicosAdi['20'] = self.servicosAdic20
         servicosAdi['40'] = self.servicosAdic40
-        taxaConver = kwargs.get("taxaConver")
+        taxaConver = eval(kwargs.get("taxaConver"))
 
         if(container == '40'):
             formulaPeriodos = lambda taxaConver,x, taxaConteiner, valorMinimo, valorFixo: (((taxaConteiner*x*taxaConver) + valorFixo )/0.8575) if((taxaConteiner*x*taxaConver) > valorMinimo) else (valorMinimo + valorFixo)/0.8575
