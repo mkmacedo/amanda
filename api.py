@@ -66,7 +66,7 @@ class MemCalcDHL(Resource):
         args = parser.parse_args()
 
         data = MemCalculo.MemCalculoDHL()
-        result = data.calcular(args['pesoBruto'], transportation=str(args['transportation']), taxaEUR=args['taxaEUR'], taxaUSD=args['taxaUSD'], qtdContainer=args['qtdContainer'] )
+        result = data.calcular(pesoBruto=args['pesoBruto'], transportation=str(args['transportation']), taxaEUR=args['taxaEUR'], taxaUSD=args['taxaUSD'], qtdContainer=args['qtdContainer'] )
         return {'data': result}, 200
 
 

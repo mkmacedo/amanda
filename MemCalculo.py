@@ -500,9 +500,13 @@ class MemCalculoDHL(MemCalculo):
         transportation = kwargs.get("transportation")
         pesoBruto = kwargs.get("pesoBruto")
         qtdContainer = kwargs.get("qtdContainer")
+        if type(qtdContainer) == type('str'):
+            qtdContainer = eval(qtdContainer)
 
         if transportation == "Marítimo":
             taxaEUR = kwargs.get("taxaEUR")
+            if type(taxaEUR) == type('str'):
+                taxaEUR = eval(taxaEUR)
             formulaPisMarit = self.iss * self.taxaAdminMarit
             formulaEUR = self.taxaAdminMarit + formulaPisMarit
             valorBRLImposto = formulaEUR * taxaEUR
@@ -512,6 +516,8 @@ class MemCalculoDHL(MemCalculo):
         
         elif transportation == "Aéreo":
             taxaUSD = kwargs.get("taxaUSD")
+            if type(taxaUSD) == type('str'):
+                taxaUSD = eval(taxaUSD)
             formulaHandlingAereo = lambda : pesoBruto*self.handlingAereo.get("percent") if(pesoBruto*self.handlingAereo.get("percent")  > self.handlingAereo.get("min")) else self.handlingAereo.get("min")
             formulaDeliveryFeeAereo  = lambda : pesoBruto*self.delivreyFeeAereo.get("percent") if(pesoBruto*self.delivreyFeeAereo.get("percent")  >  self.delivreyFeeAereo.get("percent")) else self.delivreyFeeAereo.get("min")
             formaulaPis =  self.iss*(formulaHandlingAereo()+formulaDeliveryFeeAereo())
@@ -554,6 +560,8 @@ class MemCalculoDMS(MemCalculo):
         leadtime = self.getDias(dataEntrada, dataSaida)
         transportation = kwargs.get("transportation")
         numLI = kwargs.get("numLI")
+        if type(numLI) == type('str'):
+            numLI = eval(numLI)
         
 
         valor = lambda : self.valorProcesso ['acima de 20 dias'] if(leadtime > 20) else self.valorProcesso['16 a 20 dias'] if (leadtime > 15) else self.valorProcesso['11 a 15 dias'] if(leadtime > 10) else self.valorProcesso['10 dias']
