@@ -84,7 +84,25 @@ class MemCalcDMS(Resource):
         result = data.calcular(numLI=args['numLI'], transportation=str(args['transportation']), dataEntrada=args['dataEntrada'], dataSaida=args['dataSaida'])
         return {'data': result}, 200
 
+class MemCalcKN(Resource):
+#    def __init__(self):
+#        pass
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('origem', required=True)
+        parser.add_argument('emissao', required=True)
+        parser.add_argument('container', required=True)
+        parser.add_argument('qtdContainer', required=True)
+        parser.add_argument('tipoContainer', required=True)
+        args = parser.parse_args()
 
+        data = MemCalculo.MemCalculoKN()
+        result = data.calcular(origem=args['origem'], emissao=args['emissao'], container=str(args['container']), qtdContainer=args['qtdContainer'], tipoContainer=args['tipoContainer'])
+        return {'data': '{:.2f}'.format(result)}, 200
+
+
+
+api.add_resource(MemCalcKN, '/KN')
 
 api.add_resource(MemCalcDMS, '/DMS')
 

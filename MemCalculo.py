@@ -3,6 +3,8 @@ from datetime import datetime
 import traceback
 import re
 
+from bacen import getCotacao
+
 class MemCalculo:
 
     def __init__(self):
@@ -572,6 +574,39 @@ class MemCalculoDMS(MemCalculo):
                
                  
         return total
+
+#KN
+class MemCalculoKN(MemCalculo):
+    def __init__(self, varJson=None):
+        self.varJson = {
+                    'MONTEVIDEO': {'20': {'REFEER': 14602.00, 'DRY': 13322.00}, '40': {'REFEER': 14602.00, 'DRY': 13322.00}},
+                    'CUAUTILAN': {'20': {'REFEER': 414.00}, '40': {'REFEER': 414.00}}
+                    }
+      
+
+    @property
+    def variables (self):
+        return (self.varJson)
+    
+    @variables.setter
+    def variables (self, varJson):
+        self.varJson = varJson
+      
+    
+    def calcular(self,**kwargs):
+        qtdContainer = kwargs.get('qtdContainer')
+        if type(qtdContainer) == type('str'):
+            qtdContainer = eval(qtdContainer)
+        emissao = kwargs.get('emissao')
+        container = kwargs.get('container')
+        origem = kwargs.get('origem')
+        tipoContainer = kwargs.get('tipoContainer')
+        print('ORIGEM', origem)
+        if origem in list(self.varJson.keys()):
+            valor = self.varJson[origem].get(container).get(tipoContainer)
+        taxa = getCotacao(emissao)
+        valor *= taxa+(taxa*0.07)
+        return valor#*qtdContainer
 
 
 

@@ -29,7 +29,9 @@ class API_Client():
 
 #a = API_Client('http://127.0.0.1:5000/DHL?pesoBruto=579&transportation=Marítimo&taxaEUR=6.3&taxaUSD=5.0&qtdContainer=1').result
 
-a = API_Client('http://127.0.0.1:5000/DMS?numLI=1&transportation=SEA&dataEntrada=2021-03-07&dataSaida=2021-03-05').result
+#a = API_Client('http://127.0.0.1:5000/DMS?numLI=1&transportation=SEA&dataEntrada=2021-03-07&dataSaida=2021-03-05').result
+
+a = API_Client('http://127.0.0.1:5000/KN?origem=MONTEVIDEO&emissao=02-03-2022&container=20&qtdContainer=1&tipoContainer=REFEER').result
 
 print(a)
 
