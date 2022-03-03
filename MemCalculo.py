@@ -330,8 +330,13 @@ class MemCalculoMulti(MemCalculo):
 
     def calcular(self, cif, **kwargs):
 
+        if type(cif) == type('str'):
+            cif = eval(cif)
+
         container = kwargs.get("container")
         dias = kwargs.get("dias")
+        if type(dias) == type('str'):
+            dias = eval(dias)
         numPeriodos = self.getNumPeriodos(dias)
         variaveisPeriodo = {}
         variaveisPeriodo['20'] = self.variaveisPeriodoC20
