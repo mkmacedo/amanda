@@ -5,7 +5,7 @@ from flask_restful import Resource, Api, reqparse
 app = Flask(__name__)
 api = Api(app)
 
-class MemCalc(Resource):
+class MemCalcRio(Resource):
 #    def __init__(self):
 #        pass
     def get(self):
@@ -22,7 +22,7 @@ class MemCalc(Resource):
         result = '{:.2f}'.format(result)
         return {'data': result}, 200
 
-api.add_resource(MemCalc, '/Rio')
+api.add_resource(MemCalcRio, '/Rio')
 
 if __name__ == '__main__':
     app.run(debug=True)
