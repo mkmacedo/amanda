@@ -181,7 +181,15 @@ class MemCalculoLibra(MemCalculo):
     def calcular(self, cif, **kwargs):        
         if(type(cif) == type('str')):
             cif = eval(cif)
+
+        valor = kwargs.get("valor")
+        if(type(valor) == type('str')):
+            valor = valor.replace('.', '').replace(',','')
+            valor = valor[:-2]+'.'+valor[-2:]
+            valor = eval(valor)
+
         container = kwargs.get("container")
+
         dias = kwargs.get("dias")
         if type(dias) == type('str'):
             dias = int(kwargs.get("dias"))
@@ -239,7 +247,18 @@ class MemCalculoLibra(MemCalculo):
             "valorPerAdic": valorPerAdic,
             "total": total
         }
-        return dadosLibra
+        t = format(dadosLibra.get('total'), '.2f')
+
+        if valor != None:
+
+            if t == valor:
+                return True
+            else:
+                return False
+
+        else:
+            return t
+        #return dadosLibra
 
 
 
@@ -334,6 +353,12 @@ class MemCalculoMulti(MemCalculo):
 
         if type(cif) == type('str'):
             cif = eval(cif)
+        
+        valor = kwargs.get("valor")
+        if(type(valor) == type('str')):
+            valor = valor.replace('.', '').replace(',','')
+            valor = valor[:-2]+'.'+valor[-2:]
+            valor = eval(valor)
 
         container = kwargs.get("container")
         dias = kwargs.get("dias")
@@ -380,8 +405,14 @@ class MemCalculoMulti(MemCalculo):
             "posicionamento": posicionamento,
             "faturamentoT": faturamentoT
         }
-
-        return dadosMulti
+        
+        t = dadosMulti.get('faturamentoT')
+        t = format(t, '.2f')
+        if t == valor:
+            return True
+        else:
+            return False
+        #return dadosMulti
 
 
 class MemCalculoRio(MemCalculo):
@@ -428,6 +459,13 @@ class MemCalculoRio(MemCalculo):
 
     def calcular(self, cif, **kwargs):
         cif = eval(cif)
+
+        valor = kwargs.get("valor")
+        if(type(valor) == type('str')):
+            valor = valor.replace('.', '').replace(',','')
+            valor = valor[:-2]+'.'+valor[-2:]
+            valor = eval(valor)
+
         dataEntrada = kwargs.get("dataEntrada")
         dataSaida = kwargs.get("dataSaida")
         dias = self.getDias(dataEntrada, dataSaida)
@@ -451,7 +489,16 @@ class MemCalculoRio(MemCalculo):
 
             total = capatazia + subArm
 
-            return total
+            total = format(total, '.2f')
+
+            if valor != None:
+
+                if total == valor:
+                    return True
+                else:
+                    return False
+            else:
+                return total
 
         else:
             if(cifPesoLiquido <= self.variaveisPesoLiquido[1].get('min')):
@@ -468,7 +515,15 @@ class MemCalculoRio(MemCalculo):
 
             total = subArm
         total = format(total, '.2f')
-        return total
+
+        if valor != None:
+            
+            if total == valor:
+                return True
+            else:
+                return False
+        else:
+            return total
 
 class MemCalculoDHL(MemCalculo):
     def __init__(self, varJson=None):
@@ -505,7 +560,7 @@ class MemCalculoDHL(MemCalculo):
         if type(qtdContainer) == type('str'):
             qtdContainer = eval(qtdContainer)
 
-        if transportation == "Marítimo":
+        if transportation == "SEA":
             taxaEUR = kwargs.get("taxaEUR")
             if type(taxaEUR) == type('str'):
                 taxaEUR = eval(taxaEUR)
@@ -516,7 +571,7 @@ class MemCalculoDHL(MemCalculo):
 
             return valorBRLImposto, valorBRL
         
-        elif transportation == "Aéreo":
+        elif transportation == "AIR":
             taxaUSD = kwargs.get("taxaUSD")
             if type(taxaUSD) == type('str'):
                 taxaUSD = eval(taxaUSD)
@@ -557,6 +612,13 @@ class MemCalculoDMS(MemCalculo):
       
     
     def calcular(self,**kwargs):
+
+        valor = kwargs.get("valor")
+        if(type(valor) == type('str')):
+            valor = valor.replace('.', '').replace(',','')
+            valor = valor[:-2]+'.'+valor[-2:]
+            valor = eval(valor)
+
         dataEntrada = kwargs.get("dataEntrada")
         dataSaida = kwargs.get("dataSaida")
         leadtime = self.getDias(dataEntrada, dataSaida)
@@ -566,14 +628,20 @@ class MemCalculoDMS(MemCalculo):
             numLI = eval(numLI)
         
 
-        valor = lambda : self.valorProcesso ['acima de 20 dias'] if(leadtime > 20) else self.valorProcesso['16 a 20 dias'] if (leadtime > 15) else self.valorProcesso['11 a 15 dias'] if(leadtime > 10) else self.valorProcesso['10 dias']
+        val = lambda : self.valorProcesso ['acima de 20 dias'] if(leadtime > 20) else self.valorProcesso['16 a 20 dias'] if (leadtime > 15) else self.valorProcesso['11 a 15 dias'] if(leadtime > 10) else self.valorProcesso['10 dias']
         expurgo = lambda : self.valorExpurgo.get("10 dias") if (transportation == 'SEA') else 0
         li = self.valorLI.get ("10 dias") * numLI 
-        valorIss = (valor() + expurgo() + li) * self.iss
-        total =  valor() + expurgo() + li + valorIss
-               
-                 
-        return total
+        valorIss = (val() + expurgo() + li) * self.iss
+        total =  val() + expurgo() + li + valorIss
+        
+        if valor != None:
+
+            if valor == total:
+                return True
+            else:
+                return False         
+        else:
+            return total
 
 #KN
 class MemCalculoKN(MemCalculo):
@@ -594,6 +662,14 @@ class MemCalculoKN(MemCalculo):
       
     
     def calcular(self,**kwargs):
+
+        valor = kwargs.get("valor")
+        if(type(valor) == type('str')):
+            valor = valor.replace('.', '').replace(',','')
+            valor = valor[:-2]+'.'+valor[-2:]
+            valor = eval(valor)
+
+
         qtdContainer = kwargs.get('qtdContainer')
         if type(qtdContainer) == type('str'):
             qtdContainer = eval(qtdContainer)
@@ -603,10 +679,19 @@ class MemCalculoKN(MemCalculo):
         tipoContainer = kwargs.get('tipoContainer')
         print('ORIGEM', origem)
         if origem in list(self.varJson.keys()):
-            valor = self.varJson[origem].get(container).get(tipoContainer)
+            total = self.varJson[origem].get(container).get(tipoContainer)
         taxa = getCotacao(emissao)
-        valor *= taxa+(taxa*0.07)
-        return valor#*qtdContainer
+        total *= taxa+(taxa*0.07)
+
+        total = format(total, '.2f')
+        if valor != None:
+
+            if total == valor:
+                return True
+            else:
+                return False
+        else:
+            return total#*qtdContainer
 
 
 

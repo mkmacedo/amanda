@@ -1,7 +1,12 @@
 import MemCalculo
+
+import sys
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from icecream import ic
+
+serverIP = sys.argv[1]
+print(serverIP)
 
 app = Flask(__name__)
 api = Api(app)
@@ -16,11 +21,12 @@ class MemCalcRio(Resource):
         parser.add_argument('dataSaida', required=True)
         parser.add_argument('pesoBruto', required=True)
         parser.add_argument('pesoLiquido', required=True)
+        parser.add_argument('valor')
         args = parser.parse_args()
 
         data = MemCalculo.MemCalculoRio()
         result = data.calcular(args['cif'], dataEntrada=args['dataEntrada'], dataSaida=args['dataSaida'], pesoBruto=args['pesoBruto'], pesoLiquido=args['pesoLiquido'])
-        result = '{:.2f}'.format(result)
+        #result = '{:.2f}'.format(result)
         return {'data': result}, 200
 
 class MemCalcLibra(Resource):
@@ -32,6 +38,7 @@ class MemCalcLibra(Resource):
         parser.add_argument('container', required=True)
         parser.add_argument('taxaConver', required=True)
         parser.add_argument('dias', required=True)
+        parser.add_argument('valor')
         args = parser.parse_args()
 
         data = MemCalculo.MemCalculoLibra()
@@ -47,6 +54,7 @@ class MemCalcMulti(Resource):
         parser.add_argument('cif', required=True)
         parser.add_argument('container', required=True)
         parser.add_argument('dias', required=True)
+        parser.add_argument('valor')
         args = parser.parse_args()
 
         data = MemCalculo.MemCalculoMulti()
@@ -63,6 +71,7 @@ class MemCalcDHL(Resource):
         parser.add_argument('taxaEUR', required=True)
         parser.add_argument('taxaUSD', required=True)
         parser.add_argument('qtdContainer', required=True)
+        parser.add_argument('valor')
         args = parser.parse_args()
 
         data = MemCalculo.MemCalculoDHL()
@@ -78,6 +87,7 @@ class MemCalcDMS(Resource):
         parser.add_argument('transportation', required=True)
         parser.add_argument('dataEntrada', required=True)
         parser.add_argument('dataSaida', required=True)
+        parser.add_argument('valor')
         args = parser.parse_args()
 
         data = MemCalculo.MemCalculoDMS()
@@ -94,11 +104,13 @@ class MemCalcKN(Resource):
         parser.add_argument('container', required=True)
         parser.add_argument('qtdContainer', required=True)
         parser.add_argument('tipoContainer', required=True)
+        parser.add_argument('valor')
         args = parser.parse_args()
 
         data = MemCalculo.MemCalculoKN()
-        result = data.calcular(origem=args['origem'], emissao=args['emissao'], container=str(args['container']), qtdContainer=args['qtdContainer'], tipoContainer=args['tipoContainer'])
-        return {'data': '{:.2f}'.format(result)}, 200
+        result = data.calcular(origem=args['origem'], emissao=args['emissao'], container=str(args['container']), qtdContainer=args['qtdContainer'], tipoContainer=args['tipoContainer'], valor=args['valor'])
+        #result = '{:.2f}'.format(result)
+        return {'data': result}, 200
 
 
 
@@ -115,6 +127,9 @@ api.add_resource(MemCalcRio, '/Rio')
 api.add_resource(MemCalcLibra, '/Libra')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(debug=True)
+    from waitress import serve
+    #serve(app, host="0.0.0.0", port=8080)
+    serve(app, host=serverIP, port=5000)
 
 

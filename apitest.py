@@ -35,11 +35,8 @@ class API_Client():
 
 #g = API_Client('http://0.0.0.0:8080/KN?origem=MONTEVIDEO&emissao=02-03-2022&container=20&qtdContainer=1&tipoContainer=REFEER').result
 
-#a = API_Client('http://wisdom.klink.ai:30500/KN?origem=MONTEVIDEO&emissao=02-03-2022&container=20&qtdContainer=1&tipoContainer=REFEER').result
-#print(a)
-#print(b)
-#print(c)
-#print(d)
-#print(e)
-#print(f)
+a = API_Client('https://wise.klink.ai/api/admin/comexview/containerpercentual/1').result
+b = API_Client('https://wise.klink.ai/api/admin/comexview/containervalores/1').result
+print(a)
+print(b)
 
