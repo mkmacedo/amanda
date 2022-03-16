@@ -37,6 +37,14 @@ class API_Client():
 
 a = API_Client('https://wise.klink.ai/api/admin/comexview/containerpercentual/1').result
 b = API_Client('https://wise.klink.ai/api/admin/comexview/containervalores/1').result
-print(a)
-print(b)
+c = API_Client('https://wise.klink.ai/api/admin/comexview/servicopercentual/1').result
+d = API_Client('https://wise.klink.ai/api/admin/comexview/servicovalores/1').result
+e = API_Client('https://wise.klink.ai/api/admin/comexview/cargageralpercentual/1').result
+f = API_Client('https://wise.klink.ai/api/admin/comexview/cargageralvalores/1').result
 
+print(a)
+#print(b)
+#print(c)
+#print(d)
+#print(e)
+#print(f)
