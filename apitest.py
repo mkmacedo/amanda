@@ -42,9 +42,9 @@ d = API_Client('https://wise.klink.ai/api/admin/comexview/servicovalores/1').res
 e = API_Client('https://wise.klink.ai/api/admin/comexview/cargageralpercentual/1').result
 f = API_Client('https://wise.klink.ai/api/admin/comexview/cargageralvalores/1').result
 
-print(a)
+#print(a)
 #print(b)
 #print(c)
-#print(d)
+print(d)
 #print(e)
 #print(f)
