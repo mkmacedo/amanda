@@ -1,3 +1,4 @@
+from distutils.log import debug
 import MemCalculo
 
 import sys
@@ -41,8 +42,8 @@ class MemCalcLibra(Resource):
         parser.add_argument('valor')
         args = parser.parse_args()
 
-        data = MemCalculo.MemCalculoLibra()
-        result = data.calcular(args['cif'], container=str(args['container']), taxaConver=args['taxaConver'], dias=args['dias'])
+        data = MemCalculo.MemCalculoLibra(True)
+        result = data.calcular(args['cif'], container=str(args['container']), taxaConver=args['taxaConver'], dias=args['dias'], valor=args['valor'])
         return {'data': result}, 200
 
 
@@ -57,8 +58,8 @@ class MemCalcMulti(Resource):
         parser.add_argument('valor')
         args = parser.parse_args()
 
-        data = MemCalculo.MemCalculoMulti()
-        result = data.calcular(args['cif'], container=str(args['container']), dias=args['dias'])
+        data = MemCalculo.MemCalculoMulti(True)
+        result = data.calcular(args['cif'], container=str(args['container']), dias=args['dias'], valor=args['valor'])
         return {'data': result}, 200
 
 class MemCalcDHL(Resource):

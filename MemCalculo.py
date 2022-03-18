@@ -216,6 +216,7 @@ class MemCalculoLibra(MemCalculo):
                 self.servicosAdic20[k] = varJson['servicosAdi20'][i].get(k)
    
 
+            
             for i in range(len(varJson['servicosAdi40'])):
                 k = list(varJson['servicosAdi40'][i].keys())
                 k = k[0]
@@ -226,8 +227,23 @@ class MemCalculoLibra(MemCalculo):
                 k = k[0]
                 self.quantServicAdic[k] = varJson['quantServAdic'][i].get(k)
 
+            #self.servicosAdic20['carregamento'] =  varServicosValores[0].get('container20ValorMinimo')
+            #self.servicosAdic20['pesagem'] =  varServicosValores[1].get('container20ValorMinimo')
+            #self.servicosAdic20['posicionamento'] =  varServicosValores[2].get('container20ValorMinimo')
+            #self.servicosAdic20['lacre'] =  varServicosValores[3].get('container20ValorMinimo')
+            #self.servicosAdic20['desunitização'] =  varServicosValores[4].get('container20ValorMinimo')
+            #self.servicosAdic20['reefer'] =  varServicosValores[5].get('container20ValorMinimo')
 
-    def calcular(self, cif, **kwargs):        
+            #self.servicosAdic40['carregamento'] =  varServicosValores[0].get('container40ValorMinimo')
+            #self.servicosAdic40['pesagem'] =  varServicosValores[1].get('container40ValorMinimo')
+            #self.servicosAdic40['posicionamento'] =  varServicosValores[2].get('container40ValorMinimo')
+            #self.servicosAdic40['lacre'] =  varServicosValores[3].get('container40ValorMinimo')
+            #self.servicosAdic40['desunitizacao'] =  varServicosValores[4].get('container40ValorMinimo')
+            #self.servicosAdic40['reefer'] =  varServicosValores[5].get('container40ValorMinimo')
+
+
+
+    def calcular(self, cif, **kwargs):     
         if(type(cif) == type('str')):
             cif = eval(cif)
 
@@ -396,8 +412,6 @@ class MemCalculoMulti(MemCalculo):
             for i in range(len(varMin)):
                 self.variaveisPeriodoC20[i + 1]['min'] = varMin[i].get('container20ValorMinimo')
                 self.variaveisPeriodoC40[i + 1]['min'] = varMin[i].get('container40ValorMinimo')
-            
-            print(self.variaveisPeriodoC20)
 
             self.servicosAdic20['aliquota'] = varAliquota[0].get('container20Percentual')
             self.servicosAdic40['aliquota'] = varAliquota[0].get('container40Percentual')
@@ -427,9 +441,7 @@ class MemCalculoMulti(MemCalculo):
 
 
             for key in list(varJson.get('quantServAdic').keys()):
-                print(key)
                 self.quantServicAdic[key] = varJson.get('quantServAdic').get(key)
-            print(self.quantServicAdic)
 
     def calcular(self, cif, **kwargs):
 
@@ -780,9 +792,9 @@ class MemCalculoKN(MemCalculo):
 
 #from dicionarioCalculos import dicionarioLibra, dicionarioMulti, dicionarioRioGaleao, dicionarioDHL
 #calc = MemCalculoLibra(dicionarioLibra['valoresPorPeriodo20'], dicionarioLibra['valoresPorPeriodo40'], dicionarioLibra['servicosAdi20'], dicionarioLibra['servicosAdi40'], dicionarioLibra['quantServAdic'])
-calc = MemCalculoLibra(True)
+#calc = MemCalculoLibra(True)
 
-print(calc.calcular(1712602.58, container = '40', taxaConver = 5.2585, dias= 2,valor = 38165.65))
+#print(calc.calcular(1712602.58, container = '40', taxaConver = 5.2585, dias= 2,valor = 38165.65))
 #
 #calc2 = MemCalculoMulti(dicionarioMulti['valoresPorPeriodo40'], dicionarioMulti['valoresPorPeriodo40'], dicionarioMulti['servicosAdi20'], dicionarioMulti['servicosAdi40'], dicionarioMulti['quantServAdic'])
 #calc2 = MemCalculoMulti(True)
